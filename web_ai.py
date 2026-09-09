@@ -30,7 +30,7 @@ LANG_DICT = {
         "download": "📊 Resmi Muhasebe Excel Raporunu İndir"
     },
     "English": {
-        "title": "🧾  King Smart Accounting (JPK)",
+        "title": "🧾 King Smart Accounting (JPK)",
         "subtitle": "Upload invoices; AI will generate your JPK_V7 compliant official Excel report.",
         "sidebar_title": "⚙️ System Status",
         "api_label": "Gemini API Key:",
@@ -224,9 +224,9 @@ if uploaded_files:
 
         st.dataframe(df_preview.style.apply(highlight_notes, axis=1), use_container_width=True)
 
-         st.download_button(
-        label=ui["download"],
-        data=create_professional_excel(all_parsed_data),
-        file_name="invoice_accounting_report.xlsx",
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        st.download_button(
+            label=ui["download"],
+            data=create_professional_excel(all_parsed_data),
+            file_name="invoice_accounting_report.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
