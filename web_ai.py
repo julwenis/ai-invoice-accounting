@@ -6,7 +6,6 @@ import json
 import re
 import io
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
@@ -158,7 +157,7 @@ def parse_with_gemini(file, api_key, max_retries=2):
     last_error = None
     for attempt in range(max_retries + 1):
         try:
-            image = Image.open(file)
+            image = Image.open(io.BytesIO(file.getvalue()))
             client = genai.Client(api_key=api_key)
             response = client.models.generate_content(model='gemini-3.6-flash', contents=[PROMPT, image])
             parsed = extract_json(response.text)
@@ -167,7 +166,7 @@ def parse_with_gemini(file, api_key, max_retries=2):
         except Exception as e:
             last_error = e
             if attempt < max_retries:
-                time.sleep(2 * (attempt + 1))
+                time.sleep(3 * (attempt + 1))
                 continue
     return {"_dosya": file.name, "Nr Faktury": "Hata", "Not": f"API Hatası: {last_error}"}
 
@@ -177,7 +176,6 @@ with st.sidebar:
     st.divider()
     st.header(ui["sidebar_title"])
     
-    # API Anahtarını otomatik olarak Bulut'tan (Secrets) çeker
     if "GEMINI_API_KEY" in st.secrets:
         api_key_input = st.secrets["GEMINI_API_KEY"]
         st.success("✅ Kurumsal Sistem Bağlantısı Aktif.")
@@ -200,16 +198,16 @@ if uploaded_files:
         all_parsed_data = []
         progress_bar = st.progress(0)
         status_text = st.empty()
-        total_files, completed = len(uploaded_files), 0
+        total_files = len(uploaded_files)
 
-        with ThreadPoolExecutor(max_workers=2) as executor:
-            futures = {executor.submit(parse_with_gemini, f, api_key_input): f for f in uploaded_files}
-            for future in as_completed(futures):
-                result = future.result()
-                all_parsed_data.append(result)
-                completed += 1
-                progress_bar.progress(completed / total_files)
-                status_text.text(f"{ui['progress']}: {completed} / {total_files} ({result['_dosya']})")
+        for i, f in enumerate(uploaded_files):
+            status_text.text(f"{ui['progress']}: {i+1} / {total_files} ({f.name})")
+            
+            result = parse_with_gemini(f, api_key_input)
+            all_parsed_data.append(result)
+            
+            progress_bar.progress((i + 1) / total_files)
+            time.sleep(1)
 
         status_text.empty()
         st.success(ui["success_msg"])
