@@ -15,7 +15,7 @@ st.set_page_config(page_title="Kebab King AI", page_icon="🧾", layout="wide")
 
 LANG_DICT = {
     "Türkçe": {
-        "title": "🧾 Kebab King Akıllı Muhasebe (JPK)",
+        "title": "🧾 King Akıllı Muhasebe (JPK)",
         "subtitle": "Faturaları yükleyin; yapay zeka JPK_V7 uyumlu resmi Excel raporunuzu hazırlasın.",
         "sidebar_title": "⚙️ Sistem Durumu",
         "api_label": "Gemini API Anahtarı:",
@@ -30,7 +30,7 @@ LANG_DICT = {
         "download": "📊 Resmi Muhasebe Excel Raporunu İndir"
     },
     "English": {
-        "title": "🧾 Kebab King Smart Accounting (JPK)",
+        "title": "🧾  King Smart Accounting (JPK)",
         "subtitle": "Upload invoices; AI will generate your JPK_V7 compliant official Excel report.",
         "sidebar_title": "⚙️ System Status",
         "api_label": "Gemini API Key:",
@@ -45,7 +45,7 @@ LANG_DICT = {
         "download": "📊 Download Official Excel Report"
     },
     "Polski": {
-        "title": "🧾 Inteligentna Księgowość Kebab King (JPK)",
+        "title": "🧾 Inteligentna Księgowość King (JPK)",
         "subtitle": "Prześlij faktury; AI wygeneruje oficjalny raport Excel zgodny z JPK_V7.",
         "sidebar_title": "⚙️ Status Systemu",
         "api_label": "Klucz API Gemini:",
@@ -160,7 +160,7 @@ def parse_with_gemini(file, api_key, max_retries=2):
         try:
             image = Image.open(file)
             client = genai.Client(api_key=api_key)
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=[PROMPT, image])
+            response = client.models.generate_content(model='gemini-3.6-flash', contents=[PROMPT, image])
             parsed = extract_json(response.text)
             parsed["_dosya"] = file.name
             return validate_and_flag(parsed)
@@ -227,6 +227,6 @@ if uploaded_files:
         st.download_button(
             label=ui["download"],
             data=create_professional_excel(all_parsed_data),
-            file_name="Kebab_King_Resmi_Muhasebe_Defteri.xlsx",
+            file_name="invoice_accounting_report.xlsx"
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
