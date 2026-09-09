@@ -224,9 +224,9 @@ if uploaded_files:
 
         st.dataframe(df_preview.style.apply(highlight_notes, axis=1), use_container_width=True)
 
-        st.download_button(
-            label=ui["download"],
-            data=create_professional_excel(all_parsed_data),
-            file_name="invoice_accounting_report.xlsx"
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+         st.download_button(
+        label=ui["download"],
+        data=create_professional_excel(all_parsed_data),
+        file_name="invoice_accounting_report.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
