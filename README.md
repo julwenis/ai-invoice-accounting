@@ -94,11 +94,7 @@ streamlit run web_ai.py
 
 ## 📊 Output
 
-Processed invoice data is displayed inside the application and can be exported as an Excel workbook:
-
-```text
-Kebab_King_Resmi_Muhasebe_Defteri.xlsx
-```
+Processed invoice data is displayed inside the application and can be exported as an Excel workbook for further accounting workflows.
 
 ## ⚠️ Disclaimer
 
